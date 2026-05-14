@@ -1,4 +1,5 @@
 #include "shader.hpp"
+#include <cmath>
 
 namespace shader {
     Shader::Shader(const std::string &vert_path, const std::string &frag_path) {
@@ -46,8 +47,12 @@ namespace shader {
 
     }
 
+
     void Shader::use() {
+        GLuint uniID = glGetUniformLocation(shaderProgram, "color");
+        float time = glfwGetTime();
         glUseProgram(shaderProgram);
+        glUniform4f(uniID, 0.5f, (sin(time) / 2.0f) + 0.5f, (cos(time) / 2.0f) + 0.5f, 1.0f);
     }
 
     std::optional<std::string> Shader::retrieveSourceCode(const std::string path) {

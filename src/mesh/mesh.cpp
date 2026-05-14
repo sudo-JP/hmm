@@ -17,12 +17,12 @@ namespace mesh {
 
         glBufferData(GL_ARRAY_BUFFER, vert_len * sizeof(float), vertices, GL_STATIC_DRAW);
 
-        // coordinate at 0 
+        // coordinate at location 0, layout
         // each vertices has 3 point
-        const int pos = 0;
+        const int loc = 0;
         const int num_points_per_vert = 3;
-        glVertexAttribPointer(pos, num_points_per_vert, GL_FLOAT, GL_FALSE, num_points_per_vert * sizeof(float), (void*)0);       
-        glEnableVertexAttribArray(pos);
+        glVertexAttribPointer(loc, num_points_per_vert, GL_FLOAT, GL_FALSE, num_points_per_vert * sizeof(float), (void*)0);       
+        glEnableVertexAttribArray(loc);
 
         // Unbind VAO first to stop recording 
         glBindVertexArray(0);
