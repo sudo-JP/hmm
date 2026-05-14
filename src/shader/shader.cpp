@@ -32,8 +32,6 @@ namespace shader {
         glShaderSource(fragmentShader, 1, &frag, NULL);
 
         glCompileShader(fragmentShader);
-        success = errorCheckCompile(fragmentShader);
-        if (!success) std::abort();
 
 
         shaderProgram = glCreateProgram();
