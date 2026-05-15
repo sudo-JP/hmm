@@ -18,6 +18,6 @@ namespace shader {
     private:
         std::optional<std::string> retrieveSourceCode(const std::string path);
         GLint errorCheckCompile(GLuint gl_value);
-        GLuint shaderProgram; 
+        GLuint progID; 
     };
 }

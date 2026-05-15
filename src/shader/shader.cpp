@@ -35,11 +35,11 @@ namespace shader {
         glCompileShader(fragmentShader);
 
 
-        shaderProgram = glCreateProgram();
+        progID = glCreateProgram();
 
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragmentShader);
-        glLinkProgram(shaderProgram);
+        glAttachShader(progID, vertexShader);
+        glAttachShader(progID, fragmentShader);
+        glLinkProgram(progID);
 
 
         glDeleteShader(vertexShader);
@@ -49,10 +49,10 @@ namespace shader {
 
 
     void Shader::use() {
-        GLuint uniID = glGetUniformLocation(shaderProgram, "color");
+        /*GLuint uniID = glGetUniformLocation(progID, "color");
         float time = glfwGetTime();
-        glUseProgram(shaderProgram);
-        glUniform4f(uniID, 0.5f, (sin(time) / 2.0f) + 0.5f, (cos(time) / 2.0f) + 0.5f, 1.0f);
+        glUniform4f(uniID, 0.5f, (sin(time) / 2.0f) + 0.5f, (cos(time) / 2.0f) + 0.5f, 1.0f);*/
+        glUseProgram(progID);
     }
 
     std::optional<std::string> Shader::retrieveSourceCode(const std::string path) {
@@ -80,6 +80,6 @@ namespace shader {
 
 
     Shader::~Shader() {
-        glDeleteProgram(shaderProgram);
+        glDeleteProgram(progID);
     }
 }

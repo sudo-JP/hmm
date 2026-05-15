@@ -15,14 +15,14 @@ namespace mesh {
             indices_ebo = indices_len;
         }
 
-        glBufferData(GL_ARRAY_BUFFER, vert_len * sizeof(float), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vert_len, vertices, GL_STATIC_DRAW);
 
         // coordinate at location 0, layout
         // each vertices has 3 point
-        const int loc = 0;
-        const int num_points_per_vert = 3;
-        glVertexAttribPointer(loc, num_points_per_vert, GL_FLOAT, GL_FALSE, num_points_per_vert * sizeof(float), (void*)0);       
-        glEnableVertexAttribArray(loc);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);       
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));       
+        glEnableVertexAttribArray(1);
 
         // Unbind VAO first to stop recording 
         glBindVertexArray(0);

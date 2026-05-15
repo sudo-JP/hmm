@@ -9,6 +9,7 @@ find_package(OpenGL REQUIRED)
 add_subdirectory(src/mesh)
 add_subdirectory(src/shader)
 add_subdirectory(src/window)
+add_subdirectory(src/texture)
 
 add_executable(TestOpenGL
     src/main.cpp
@@ -22,4 +23,5 @@ target_link_libraries(TestOpenGL PRIVATE mesh)
 target_link_libraries(TestOpenGL PRIVATE window)
 target_link_libraries(TestOpenGL PRIVATE shader)
 target_link_libraries(TestOpenGL PRIVATE glfw)
+target_link_libraries(TestOpenGL PRIVATE texture)
 

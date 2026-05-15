@@ -5,12 +5,13 @@
 
 int main() {
     float vertices[] = {
-        -0.5f, 0.0f, 0.0f, 
-        0.5f, 0.0f, 0.0f, 
-        0.0f, -0.5f, 0.0f, 
-        0.0f, 0.5f, 0.0f, 
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
+        // Positions         // colors
+        -0.5f, 0.0f, 0.0f,   1.0f, 0.5f, 0.0f,
+        0.5f, 0.0f, 0.0f,    0.0f, 1.0f, 0.5f, 
+        0.0f, -0.5f, 0.0f,   0.5f, 1.0f, 0.0f, 
+        0.0f, 0.5f, 0.0f,    0.5f, 0.5f, 1.0f,
+        -0.5f, -0.5f, 0.0f,  0.5f, 0.0f, 0.0f, 
+        0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,
     };
 
     unsigned int indices[] = {
@@ -24,7 +25,7 @@ int main() {
     window::Window win;
 
     // 4 point, each with 3 vert
-    mesh::Mesh mesh(vertices, 6 * 3, GL_TRIANGLES, p);
+    mesh::Mesh mesh(vertices, sizeof(vertices), GL_TRIANGLES, p);
     shader::Shader shader("vertex.glsl", "fragment.glsl");
 
     win.render([&]() {
