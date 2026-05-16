@@ -7,11 +7,11 @@
 namespace texture {
     class Texture {
     public: 
-        Texture(const std::string &file_name);
+        Texture(const std::string &base, const std::string &overlay);
         ~Texture();
         void bind();
 
     private:
-        GLuint texture; 
+        GLuint texture1, texture2; 
     };
 }

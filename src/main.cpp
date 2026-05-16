@@ -7,12 +7,12 @@
 int main() {
     float vertices[] = {
         // Positions         // colors          // texures
-        -0.5f, 0.0f, 0.0f,   1.0f, 0.5f, 0.0f,  0.0f, 0.0f,  
-        0.5f, 0.0f, 0.0f,    0.0f, 1.0f, 0.5f,  0.5f, 0.5f, 
-        0.0f, -0.5f, 0.0f,   0.5f, 1.0f, 0.0f,  1.0f, 0.0f,
-        0.0f, 0.5f, 0.0f,    0.5f, 0.5f, 1.0f,  1.0f, 1.0f, 
-        -0.5f, -0.5f, 0.0f,  0.5f, 0.0f, 0.0f,  1.0f, 0.0f,
-        0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  0.5f, 0.0f, 
+        -0.5f, 0.0f, 0.0f,   1.0f, 0.5f, 0.0f,  0.0f, 0.5f,  // left top
+        0.5f, 0.0f, 0.0f,    0.0f, 1.0f, 0.5f,  1.0f, 0.5f,  // right top
+        0.0f, -0.5f, 0.0f,   0.5f, 1.0f, 0.0f,  0.5f, 0.5f,  // bottom middle 
+        0.0f, 0.5f, 0.0f,    0.5f, 0.5f, 1.0f,  0.5f, 1.0f,  // roof 
+        -0.5f, -0.5f, 0.0f,  0.5f, 0.0f, 0.0f,  0.0f, 0.0f,  // left bottom 
+        0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // right bottom 
     };
 
     unsigned int indices[] = {
@@ -25,7 +25,7 @@ int main() {
     std::pair<unsigned int*, size_t> p = {indices, 12};
     window::Window win;
 
-    texture::Texture tex("tamm-cat.png");
+    texture::Texture tex("modiface.png", "tamm-cat.png");
     mesh::Mesh mesh(vertices, sizeof(vertices), GL_TRIANGLES, p);
     shader::Shader shader("vertex.glsl", "fragment.glsl");
 

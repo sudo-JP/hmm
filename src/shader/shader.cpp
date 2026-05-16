@@ -53,6 +53,8 @@ namespace shader {
         float time = glfwGetTime();
         glUniform4f(uniID, 0.5f, (sin(time) / 2.0f) + 0.5f, (cos(time) / 2.0f) + 0.5f, 1.0f);*/
         glUseProgram(progID);
+        glUniform1i(glGetUniformLocation(progID, "texture1"), 1);
+        glUniform1i(glGetUniformLocation(progID, "texture2"), 0);
     }
 
     std::optional<std::string> Shader::retrieveSourceCode(const std::string path) {
