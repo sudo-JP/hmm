@@ -1,17 +1,18 @@
 #include "shader.hpp"
 #include "mesh.hpp"
 #include "window.hpp"
+#include "texture.hpp"
 #include <iostream>
 
 int main() {
     float vertices[] = {
-        // Positions         // colors
-        -0.5f, 0.0f, 0.0f,   1.0f, 0.5f, 0.0f,
-        0.5f, 0.0f, 0.0f,    0.0f, 1.0f, 0.5f, 
-        0.0f, -0.5f, 0.0f,   0.5f, 1.0f, 0.0f, 
-        0.0f, 0.5f, 0.0f,    0.5f, 0.5f, 1.0f,
-        -0.5f, -0.5f, 0.0f,  0.5f, 0.0f, 0.0f, 
-        0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,
+        // Positions         // colors          // texures
+        -0.5f, 0.0f, 0.0f,   1.0f, 0.5f, 0.0f,  0.0f, 0.0f,  
+        0.5f, 0.0f, 0.0f,    0.0f, 1.0f, 0.5f,  0.5f, 0.5f, 
+        0.0f, -0.5f, 0.0f,   0.5f, 1.0f, 0.0f,  1.0f, 0.0f,
+        0.0f, 0.5f, 0.0f,    0.5f, 0.5f, 1.0f,  1.0f, 1.0f, 
+        -0.5f, -0.5f, 0.0f,  0.5f, 0.0f, 0.0f,  1.0f, 0.0f,
+        0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  0.5f, 0.0f, 
     };
 
     unsigned int indices[] = {
@@ -24,7 +25,7 @@ int main() {
     std::pair<unsigned int*, size_t> p = {indices, 12};
     window::Window win;
 
-    // 4 point, each with 3 vert
+    texture::Texture tex("tamm-cat.png");
     mesh::Mesh mesh(vertices, sizeof(vertices), GL_TRIANGLES, p);
     shader::Shader shader("vertex.glsl", "fragment.glsl");
 
@@ -32,6 +33,7 @@ int main() {
         glClearColor(0.616f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         shader.use();
+        tex.bind();
         mesh.draw();
     });
 

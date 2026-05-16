@@ -1,4 +1,6 @@
 #include "texture.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 namespace texture {
     Texture::Texture(const std::string &filename) {
@@ -23,4 +25,13 @@ namespace texture {
 
         stbi_image_free(image);
     }
+
+    void Texture::bind() {
+        glBindTexture(GL_TEXTURE_2D, texture);
+    }
+
+    Texture::~Texture() {
+        glBindTexture(0, texture);
+    }
+
 }
