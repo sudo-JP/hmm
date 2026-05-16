@@ -1,5 +1,4 @@
 #include "shader.hpp"
-#include <cmath>
 
 namespace shader {
     Shader::Shader(const std::string &vert_path, const std::string &frag_path) {
@@ -55,6 +54,11 @@ namespace shader {
         glUseProgram(progID);
         glUniform1i(glGetUniformLocation(progID, "texture1"), 1);
         glUniform1i(glGetUniformLocation(progID, "texture2"), 0);
+
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        unsigned int transformLoc = glGetUniformLocation(progID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
     }
 
     std::optional<std::string> Shader::retrieveSourceCode(const std::string path) {

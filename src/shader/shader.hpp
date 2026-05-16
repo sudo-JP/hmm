@@ -3,10 +3,15 @@
 #include <optional>
 #include <string>
 #include "GLFW/glfw3.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace shader {
     class Shader {
