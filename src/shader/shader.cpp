@@ -1,5 +1,17 @@
 #include "shader.hpp"
+#include <cmath>
+#include <glm/geometric.hpp>
 #include <glm/trigonometric.hpp>
+#include "GLFW/glfw3.h"
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace shader {
     Shader::Shader(const std::string &vert_path, const std::string &frag_path) {
@@ -59,11 +71,31 @@ namespace shader {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        glm::mat4 view; 
+        //= glm::mat4(1.0f);
+        //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
         glm::mat4 proj = glm::mat4(1.0f);
         proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+        const float radius = 10.0f;
+        float camX = sin(glfwGetTime()) * radius;
+        float camZ = cos(glfwGetTime()) * radius;
+
+        glm::vec3 cameraPos = glm::vec3(camX, 0.0f, camZ);
+        glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+
+        glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+        //glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+        //glm::vec3 cameraUp = glm::normalize(glm::cross(cameraRight, cameraDirection));
+
+
+        view = glm::lookAt(
+            cameraPos, 
+            cameraTarget,
+            up
+        );
 
         unsigned int transformLoc = glGetUniformLocation(progID, "transform");
         unsigned int modelLoc = glGetUniformLocation(progID, "model");
