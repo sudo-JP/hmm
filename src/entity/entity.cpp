@@ -1,0 +1,36 @@
+#include "entity.hpp"
+#include <optional>
+#include <utility>
+#include "glm/gtc/matrix_transform.hpp"
+
+namespace entity {
+    mesh::Mesh build_mesh(const std::vector<float> &vertices, const std::vector<unsigned int> &indices) {
+        std::optional<std::pair<const unsigned int*, size_t>> ebo_param = std::nullopt;
+        if (indices.size() > 0) {
+            std::pair<const unsigned int*, size_t> p = {indices.data(), indices.size()};
+            ebo_param = p;
+        } 
+        return mesh::Mesh(vertices.data(), vertices.size() * sizeof(float), GL_TRIANGLES, ebo_param);
+    }
+
+    Entity::Entity(const std::vector<float> &vertices, 
+        const std::vector<unsigned int> &indices) 
+        : m_mesh(build_mesh(vertices, indices)), m_model(glm::mat4(1.0f)) {}
+
+    void Entity::draw() { m_mesh.draw(); }
+
+    glm::mat4 Entity::get_model() { return m_model; }
+
+    void Entity::rotate(float angle, const glm::vec3 &v) { 
+        m_model = glm::rotate(m_model, angle, v);
+    }
+
+
+    void Entity::translate(const glm::vec3 &v) {
+        m_model = glm::translate(m_model, v);
+    }
+
+    void Entity::scale(const glm::vec3 &v) {
+        m_model = glm::scale(m_model, v);
+    }
+}

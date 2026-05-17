@@ -7,7 +7,7 @@
 namespace mesh {
     class Mesh {
     public:
-        Mesh(float *vertices, size_t vert_len, GLuint shape, std::optional<std::pair<unsigned int*, size_t>> ebo_pair);
+        Mesh(const float *vertices, size_t vert_len, GLuint shape, std::optional<std::pair<const unsigned int*, size_t>> ebo_pair);
         ~Mesh();
 
         void draw();

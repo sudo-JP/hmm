@@ -10,7 +10,6 @@ namespace camera {
             float fov, float aspect, float z_near, float z_far, 
             glm::vec3 cam_pos, glm::vec3 up_vec, glm::vec3 cam_target
         );
-        ~Camera();
         glm::mat4 get_view();
         glm::mat4 get_projection();
 
