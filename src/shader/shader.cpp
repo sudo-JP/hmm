@@ -1,4 +1,5 @@
 #include "shader.hpp"
+#include <glm/trigonometric.hpp>
 
 namespace shader {
     Shader::Shader(const std::string &vert_path, const std::string &frag_path) {
@@ -55,10 +56,23 @@ namespace shader {
         glUniform1i(glGetUniformLocation(progID, "texture1"), 1);
         glUniform1i(glGetUniformLocation(progID, "texture2"), 0);
 
-        glm::mat4 transform = glm::mat4(1.0f);
-        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+        glm::mat4 proj = glm::mat4(1.0f);
+        proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
         unsigned int transformLoc = glGetUniformLocation(progID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        unsigned int modelLoc = glGetUniformLocation(progID, "model");
+        unsigned int viewLoc = glGetUniformLocation(progID, "view");
+        unsigned int projLoc = glGetUniformLocation(progID, "proj");
+
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
     }
 
     std::optional<std::string> Shader::retrieveSourceCode(const std::string path) {

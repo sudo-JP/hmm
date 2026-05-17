@@ -12,6 +12,7 @@ FetchContent_MakeAvailable(glm)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(OpenGL_GL_PREFERENCE "LEGACY")
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
