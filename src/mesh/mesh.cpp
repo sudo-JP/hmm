@@ -1,18 +1,18 @@
 #include "mesh.hpp"
 
 namespace mesh {
-    Mesh::Mesh(float *vertices, size_t vert_len, GLuint shape, std::optional<std::pair<unsigned int*, size_t>> ebo_pair) : shape(shape) {
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    Mesh::Mesh(float *vertices, size_t vert_len, GLuint shape, std::optional<std::pair<unsigned int*, size_t>> ebo_pair) : m_shape(shape) {
+        glGenVertexArrays(1, &m_VAO);
+        glGenBuffers(1, &m_VBO);
+        glBindVertexArray(m_VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
         if (ebo_pair) {
             auto [indices, indices_len] = ebo_pair.value();
-            glGenBuffers(1, &EBO);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+            glGenBuffers(1, &m_EBO);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices_len, indices, GL_STATIC_DRAW);
-            indices_ebo = indices_len;
+            m_indices_ebo = indices_len;
         }
 
         glBufferData(GL_ARRAY_BUFFER, vert_len, vertices, GL_STATIC_DRAW);
@@ -37,17 +37,17 @@ namespace mesh {
     }
 
     Mesh::~Mesh() {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        if (EBO != 0) glDeleteBuffers(1, &EBO);
+        glDeleteVertexArrays(1, &m_VAO);
+        glDeleteBuffers(1, &m_VBO);
+        if (m_EBO != 0) glDeleteBuffers(1, &m_EBO);
     }
 
     void Mesh::draw() {
-        glBindVertexArray(VAO);
-        if (EBO == 0) {
-            glDrawArrays(shape, 0, 3);
+        glBindVertexArray(m_VAO);
+        if (m_EBO == 0) {
+            glDrawArrays(m_shape, 0, 3);
         } else {
-            glDrawElements(shape, indices_ebo, GL_UNSIGNED_INT, 0);
+            glDrawElements(m_shape, m_indices_ebo, GL_UNSIGNED_INT, 0);
         }
     }
 }

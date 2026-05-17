@@ -34,5 +34,6 @@ target_link_libraries(TestOpenGL PRIVATE window)
 target_link_libraries(TestOpenGL PRIVATE shader)
 target_link_libraries(TestOpenGL PRIVATE glfw)
 target_link_libraries(TestOpenGL PRIVATE texture)
+target_link_libraries(TestOpenGL PRIVATE camera)
 target_link_libraries(TestOpenGL PRIVATE glm::glm)
 

@@ -13,14 +13,14 @@ namespace window {
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 
-        window = glfwCreateWindow(WITDH, HEIGHT, "Learn OpenGL", NULL, NULL);
-        if (window == NULL) {
+        m_window = glfwCreateWindow(WITDH, HEIGHT, "Learn OpenGL", NULL, NULL);
+        if (m_window == NULL) {
             std::cout << "Error Creating GLFW window" << std::endl;
             glfwTerminate();
             std::abort();
         }
 
-        glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(m_window);
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             std::cout << "Failed to init GLAD" << std::endl;
@@ -28,27 +28,27 @@ namespace window {
         }
 
         glViewport(0, 0, WITDH, HEIGHT);
-        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+        glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
     }
 
     
     void Window::render(std::function<void(void)> callback) {
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(m_window)) {
             callback();
-            inputHandler();
-            glfwSwapBuffers(window);
+            input_handler();
+            glfwSwapBuffers(m_window);
             glfwPollEvents();
         }
     }
 
-    void Window::inputHandler() {
-        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(window, true);
+    void Window::input_handler() {
+        if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS) {
+            glfwSetWindowShouldClose(m_window, true);
         }
     }
 
     Window::~Window() {
-        glfwDestroyWindow(window);
+        glfwDestroyWindow(m_window);
         glfwTerminate();
     }
 }

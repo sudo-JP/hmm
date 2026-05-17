@@ -13,9 +13,9 @@ namespace mesh {
         void draw();
 
     private:
-        GLuint VAO, VBO, EBO; 
-        GLuint shape; 
-        size_t indices_ebo;
+        GLuint m_VAO, m_VBO, m_EBO; 
+        GLuint m_shape; 
+        size_t m_indices_ebo;
     };
 
 }

@@ -18,7 +18,7 @@ namespace window {
 
     private:
 
-        void inputHandler();
-        GLFWwindow *window;
+        void input_handler();
+        GLFWwindow *m_window;
     };
 }

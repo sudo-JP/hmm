@@ -9,14 +9,13 @@
 #include <sstream>
 #include <cstdlib>
 
-#include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
 namespace shader {
     Shader::Shader(const std::string &vert_path, const std::string &frag_path) {
         const char *vertex; 
-        auto vertexSource = retrieveSourceCode("vertex.glsl");
+        auto vertexSource = retrieve_source_code("vertex.glsl");
         if (vertexSource) {
             vertex = vertexSource->c_str();
         } else {
@@ -28,11 +27,11 @@ namespace shader {
 
         glShaderSource(vertexShader, 1, &vertex, NULL);
         glCompileShader(vertexShader);
-        GLint success = errorCheckCompile(vertexShader);
+        GLint success = error_check_compile(vertexShader);
         if (!success) std::abort();
 
 
-        auto fragSource = retrieveSourceCode("fragment.glsl");
+        auto fragSource = retrieve_source_code("fragment.glsl");
         const char *frag;
         if (fragSource) {
             frag = fragSource->c_str();
@@ -47,11 +46,11 @@ namespace shader {
         glCompileShader(fragmentShader);
 
 
-        progID = glCreateProgram();
+        m_progID = glCreateProgram();
 
-        glAttachShader(progID, vertexShader);
-        glAttachShader(progID, fragmentShader);
-        glLinkProgram(progID);
+        glAttachShader(m_progID, vertexShader);
+        glAttachShader(m_progID, fragmentShader);
+        glLinkProgram(m_progID);
 
 
         glDeleteShader(vertexShader);
@@ -61,12 +60,12 @@ namespace shader {
 
 
     void Shader::use() {
-        /*GLuint uniID = glGetUniformLocation(progID, "color");
+        /*GLuint uniID = glGetUniformLocation(m_progID, "color");
         float time = glfwGetTime();
         glUniform4f(uniID, 0.5f, (sin(time) / 2.0f) + 0.5f, (cos(time) / 2.0f) + 0.5f, 1.0f);*/
-        glUseProgram(progID);
-        glUniform1i(glGetUniformLocation(progID, "texture1"), 1);
-        glUniform1i(glGetUniformLocation(progID, "texture2"), 0);
+        glUseProgram(m_progID);
+        glUniform1i(glGetUniformLocation(m_progID, "texture1"), 1);
+        glUniform1i(glGetUniformLocation(m_progID, "texture2"), 0);
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -78,7 +77,7 @@ namespace shader {
         glm::mat4 proj = glm::mat4(1.0f);
         proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
-        const float radius = 10.0f;
+        const float radius = 5.0f;
         float camX = sin(glfwGetTime()) * radius;
         float camZ = cos(glfwGetTime()) * radius;
 
@@ -97,17 +96,30 @@ namespace shader {
             up
         );
 
-        unsigned int transformLoc = glGetUniformLocation(progID, "transform");
-        unsigned int modelLoc = glGetUniformLocation(progID, "model");
-        unsigned int viewLoc = glGetUniformLocation(progID, "view");
-        unsigned int projLoc = glGetUniformLocation(progID, "proj");
+        unsigned int transformLoc = glGetUniformLocation(m_progID, "transform");
+        unsigned int modelLoc = glGetUniformLocation(m_progID, "model");
+        unsigned int viewLoc = glGetUniformLocation(m_progID, "view");
+        unsigned int projLoc = glGetUniformLocation(m_progID, "proj");
 
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
     }
 
-    std::optional<std::string> Shader::retrieveSourceCode(const std::string path) {
+    void Shader::set_uniform(const char *attr, int val) {
+        unsigned int loc = glGetUniformLocation(m_progID, attr);
+        glUniform1i(loc, val);
+    }
+    void Shader::set_uniform(const char *attr, float val) {
+        unsigned int loc = glGetUniformLocation(m_progID, attr);
+        glUniform1f(loc, val);
+    }
+    void Shader::set_uniform(const char *attr, const glm::mat4 &val) {
+        unsigned int loc = glGetUniformLocation(m_progID, attr);
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
+    }
+
+    std::optional<std::string> Shader::retrieve_source_code(const std::string &path) {
         std::ifstream file(std::string(SHADER_DIR) + "/" + path);
         if (file.is_open()) {
             std::stringstream buffer; 
@@ -119,7 +131,7 @@ namespace shader {
         }
     }
 
-    GLint Shader::errorCheckCompile(GLuint gl_value) {
+    GLint Shader::error_check_compile(GLuint gl_value) {
         GLint success; 
         char infoLog[512]; 
         glGetShaderiv(gl_value, GL_COMPILE_STATUS, &success); 
@@ -132,6 +144,6 @@ namespace shader {
 
 
     Shader::~Shader() {
-        glDeleteProgram(progID);
+        glDeleteProgram(m_progID);
     }
 }

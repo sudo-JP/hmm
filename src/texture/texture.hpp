@@ -12,6 +12,6 @@ namespace texture {
         void bind();
 
     private:
-        GLuint texture1, texture2; 
+        GLuint m_texture1, m_texture2; 
     };
 }

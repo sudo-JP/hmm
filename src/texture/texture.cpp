@@ -14,8 +14,8 @@ namespace texture {
             std::cout << "Failed to load image " << base << std::endl;
         }
 
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &m_texture1);
+        glBindTexture(GL_TEXTURE_2D, m_texture1);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);	
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -33,8 +33,8 @@ namespace texture {
             std::cout << "Failed to load image " << overlay << std::endl;
         }
 
-        glGenTextures(1, &texture2);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        glGenTextures(1, &m_texture2);
+        glBindTexture(GL_TEXTURE_2D, m_texture2);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);	
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -49,14 +49,14 @@ namespace texture {
 
     void Texture::bind() {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glBindTexture(GL_TEXTURE_2D, m_texture1);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        glBindTexture(GL_TEXTURE_2D, m_texture2);
     }
 
     Texture::~Texture() {
-        glBindTexture(0, texture1);
-        glBindTexture(0, texture2);
+        glBindTexture(0, m_texture1);
+        glBindTexture(0, m_texture2);
     }
 
 }
