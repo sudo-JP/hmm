@@ -25,6 +25,6 @@ namespace camera {
     }
 
     glm::mat4 Camera::get_projection() {
-        return glm::perspective(glm::radians(m_fov), m_aspect, m_z_near, m_z_far);
+        return glm::perspective(m_fov, m_aspect, m_z_near, m_z_far);
     }
 }

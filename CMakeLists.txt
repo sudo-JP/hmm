@@ -17,9 +17,11 @@ find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 add_subdirectory(src/mesh)
-add_subdirectory(src/shader)
 add_subdirectory(src/window)
+add_subdirectory(src/shader)
 add_subdirectory(src/texture)
+add_subdirectory(src/camera)
+add_subdirectory(src/entity)
 
 add_executable(TestOpenGL
     src/main.cpp
@@ -35,5 +37,6 @@ target_link_libraries(TestOpenGL PRIVATE shader)
 target_link_libraries(TestOpenGL PRIVATE glfw)
 target_link_libraries(TestOpenGL PRIVATE texture)
 target_link_libraries(TestOpenGL PRIVATE camera)
+target_link_libraries(TestOpenGL PRIVATE entity)
 target_link_libraries(TestOpenGL PRIVATE glm::glm)
 
