@@ -16,6 +16,7 @@ namespace window {
         ~Window();
         void render(std::function<void(void)> callback);
 
+        bool is_key_pressed(int key);
     private:
 
         void input_handler();

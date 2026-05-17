@@ -41,6 +41,10 @@ namespace window {
         }
     }
 
+    bool Window::is_key_pressed(int key) {
+        return glfwGetKey(m_window, key) == GLFW_PRESS;
+    }
+
     void Window::input_handler() {
         if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS) {
             glfwSetWindowShouldClose(m_window, true);
