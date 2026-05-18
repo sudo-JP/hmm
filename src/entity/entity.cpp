@@ -1,5 +1,6 @@
 #include "entity.hpp"
 #include <optional>
+#include <string>
 #include <utility>
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -14,12 +15,17 @@ namespace entity {
     }
 
     Entity::Entity(const std::vector<float> &vertices, 
-        const std::vector<unsigned int> &indices) 
-        : m_mesh(build_mesh(vertices, indices)), m_model(glm::mat4(1.0f)) {}
+        const std::string &vert_path, const std::string &frag_path, const std::vector<unsigned int> &indices)
+        : m_mesh(build_mesh(vertices, indices)), m_model(glm::mat4(1.0f)), m_shader(vert_path, frag_path) {}
 
-    void Entity::draw() { m_mesh.draw(); }
+    void Entity::draw() { 
+        m_shader.use();
+        m_mesh.draw(); 
+    }
 
     glm::mat4 Entity::get_model() { return m_model; }
+
+    shader::Shader& Entity::get_shader() { return m_shader; }
 
     void Entity::rotate(float angle, const glm::vec3 &v) { 
         m_model = glm::rotate(m_model, angle, v);

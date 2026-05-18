@@ -5,6 +5,10 @@ namespace mesh {
         glGenVertexArrays(1, &m_VAO);
         glGenBuffers(1, &m_VBO);
         glBindVertexArray(m_VAO);
+
+        glGenVertexArrays(1, &m_lightVAO);
+        glBindVertexArray(m_lightVAO);
+
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
         if (ebo_pair) {

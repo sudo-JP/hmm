@@ -23,6 +23,53 @@ int main() {
         0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // right bottom 
     };
 
+
+    // from the book
+    // too lazy for defining ebos for ts
+    std::vector<float> light_vertices = {
+        -0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f,  0.5f, -0.5f,
+        0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+
+        -0.5f, -0.5f,  0.5f,
+        0.5f, -0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
+
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+
+        0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,
+
+        -0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f,  0.5f,
+        0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f, -0.5f,
+
+        -0.5f,  0.5f, -0.5f,
+        0.5f,  0.5f, -0.5f,
+        0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f
+    };
+
     std::vector<unsigned int> indices = {
         0, 1, 2,
         0, 1, 3,
@@ -33,11 +80,12 @@ int main() {
     // stuff
     window::Window win;
     texture::Texture tex("modiface.png", "tamm-cat.png");
-    shader::Shader shader("vertex.glsl", "fragment.glsl");
 
     // Entity 
-    entity::Entity house = entity::Entity(vertices, indices);
+    entity::Entity house = entity::Entity(vertices, "house_vert.glsl", "house_frag.glsl", indices);
     house.rotate(glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+    entity::Entity light_cube = entity::Entity(light_vertices, "light_vert.glsl", "light_frag.glsl");
 
     // camera
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -55,22 +103,23 @@ int main() {
     win.render([&]() {
         glClearColor(0.616f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        shader.use();
+        auto house_shader = house.get_shader();
+        house_shader.use();
 
         camX = sin(glfwGetTime()) * radius;
         camZ = cos(glfwGetTime()) * radius;
         //cam.set_cam_pos(glm::vec3(camX, 0.0f, camZ));
         auto view = cam.get_view();
-        shader.set_uniform("view", view);
+        house_shader.set_uniform("view", view);
 
         auto model = house.get_model();
-        shader.set_uniform("model", model);
+        house_shader.set_uniform("model", model);
 
         auto proj = cam.get_projection();
-        shader.set_uniform("proj", proj);
+        house_shader.set_uniform("proj", proj);
 
-        shader.set_uniform("texture1", 1);
-        shader.set_uniform("texture2", 0);
+        house_shader.set_uniform("texture1", 1);
+        house_shader.set_uniform("texture2", 0);
 
         auto cam_pos = cam.get_cam_pos();
         auto cam_front = cam.get_cam_front();

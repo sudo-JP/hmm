@@ -13,7 +13,7 @@ namespace mesh {
         void draw();
 
     private:
-        GLuint m_VAO, m_VBO, m_EBO; 
+        GLuint m_VAO, m_VBO, m_EBO, m_lightVAO; 
         GLuint m_shape; 
         size_t m_indices_ebo;
     };
