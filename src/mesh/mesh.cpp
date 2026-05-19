@@ -1,4 +1,5 @@
 #include "mesh.hpp"
+#include <iostream>
 
 namespace mesh {
     Mesh::Mesh(const float *vertices, size_t vert_len, GLuint shape, const std::vector<MeshData> &datas,
@@ -58,12 +59,13 @@ namespace mesh {
     Mesh::Mesh(Mesh&&other) noexcept 
     : m_EBO(other.m_EBO), m_VAO(other.m_VAO), 
     m_VBO(other.m_VBO), m_indices_ebo(other.m_indices_ebo), 
-    m_shape(other.m_shape) {
+    m_shape(other.m_shape), m_total_vertices(other.m_total_vertices) {
         other.m_EBO = 0;
         other.m_VAO = 0;
         other.m_VBO = 0;
         other.m_indices_ebo = 0;
         other.m_shape = 0;
+        other.m_total_vertices = 0;
     }
 
     Mesh& Mesh::operator=(Mesh &&other) noexcept {
@@ -73,12 +75,14 @@ namespace mesh {
             m_VBO = other.m_VBO;
             m_indices_ebo = other.m_indices_ebo;
             m_shape = other.m_shape;
+            m_total_vertices = other.m_total_vertices;
 
             other.m_EBO = 0;
             other.m_VAO = 0;
             other.m_VBO = 0;
             other.m_indices_ebo = 0;
             other.m_shape = 0;
+            other.m_total_vertices = 0;
         }
         return *this;
     }

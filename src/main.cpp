@@ -6,9 +6,11 @@
 #include "mesh.hpp"
 #include "window.hpp"
 #include "texture.hpp"
+#include <cassert>
 #include <glm/fwd.hpp>
 #include <glm/trigonometric.hpp>
 #include <iostream>
+#include <utility>
 #include <vector>
 #define SPEED 0.05f
 
@@ -105,13 +107,38 @@ int main() {
             .size = 3,
         },
     };
-    entity::Entity light_cube = entity::Entity(light_vertices, "light_vert.glsl", "light_frag.glsl", light_cube_data);
-    light_cube.translate(glm::vec3(-1.0f, 0.0f, -0.5f));
+
+    std::vector<glm::vec3> positions = {
+        glm::vec3(1.0f, 0.0f, 0.0f),
+        glm::vec3(-1.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
+    };
+
+
+    std::vector<std::pair<std::string, std::string>> cube_shaders = {
+        {"light_vert.glsl", "light_frag.glsl"},
+        {"ambient_vert.glsl", "ambient_frag.glsl"},
+    };
+
+    assert(cube_shaders.size() == positions.size());
+
+    size_t num_cubes = positions.size();
+    std::vector<entity::Entity> cubes; 
+
+    for (size_t i = 0; i < num_cubes; i++) {
+
+        auto [vert, frag] = cube_shaders[i];
+
+        entity::Entity light_cube = entity::Entity(light_vertices, vert, frag, light_cube_data);
+        light_cube.translate(positions[i]);
+        cubes.push_back(std::move(light_cube));
+    }
+
 
     // camera
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     float k_aspect = 800.0f / 600.0f;
-    glm::vec3 cam_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 cam_pos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 cam_target = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 cam_front = glm::vec3(0.0f, 0.0f, -1.0f);
 
@@ -122,7 +149,7 @@ int main() {
     float camX, camZ;
 
     win.render([&]() {
-        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClearColor(0.114f, 0.125f, 0.129f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         auto &house_shader = house.get_shader();
         house_shader.use();
@@ -142,9 +169,22 @@ int main() {
         house_shader.set_uniform("texture1", 1);
         house_shader.set_uniform("texture2", 0);
 
-        auto &cube_shader = light_cube.get_shader();
-        cube_shader.set_uniform("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-        cube_shader.set_uniform("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+        tex.bind();
+        for (auto &cube : cubes) {
+            auto &cube_shader = cube.get_shader();
+            cube_shader.use();
+            cube_shader.set_uniform("view", view);
+            auto cube_model = cube.get_model();
+            cube_shader.set_uniform("model", cube_model);
+            cube_shader.set_uniform("proj", proj);
+
+            cube_shader.set_uniform("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+            cube_shader.set_uniform("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+            cube.render();
+        }
+
+        house.render();
+
 
         auto cam_pos = cam.get_cam_pos();
         auto cam_front = cam.get_cam_front();
@@ -161,9 +201,6 @@ int main() {
             cam.set_cam_pos(cam_pos + SPEED * glm::normalize(glm::cross(cam_front, up)));
         }
 
-        tex.bind();
-        house.render();
-        light_cube.render();
     });
 
     return 0;
