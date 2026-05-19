@@ -5,20 +5,24 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 namespace entity {
-    mesh::Mesh build_mesh(const std::vector<float> &vertices, const std::vector<unsigned int> &indices) {
+    mesh::Mesh build_mesh(const std::vector<float> &vertices, 
+            const std::vector<mesh::MeshData> &datas,
+            const std::vector<unsigned int> &indices) {
         std::optional<std::pair<const unsigned int*, size_t>> ebo_param = std::nullopt;
         if (indices.size() > 0) {
             std::pair<const unsigned int*, size_t> p = {indices.data(), indices.size()};
             ebo_param = p;
         } 
-        return mesh::Mesh(vertices.data(), vertices.size() * sizeof(float), GL_TRIANGLES, ebo_param);
+        return mesh::Mesh(vertices.data(), vertices.size() * sizeof(float), GL_TRIANGLES, datas, ebo_param);
     }
 
     Entity::Entity(const std::vector<float> &vertices, 
-        const std::string &vert_path, const std::string &frag_path, const std::vector<unsigned int> &indices)
-        : m_mesh(build_mesh(vertices, indices)), m_model(glm::mat4(1.0f)), m_shader(vert_path, frag_path) {}
+        const std::string &vert_path, const std::string &frag_path, 
+        const std::vector<mesh::MeshData> &datas,
+        const std::vector<unsigned int> &indices)
+        : m_mesh(build_mesh(vertices, datas, indices)), m_model(glm::mat4(1.0f)), m_shader(vert_path, frag_path) {}
 
-    void Entity::draw() { 
+    void Entity::render() { 
         m_shader.use();
         m_mesh.draw(); 
     }

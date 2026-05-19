@@ -15,7 +15,7 @@
 namespace shader {
     Shader::Shader(const std::string &vert_path, const std::string &frag_path) {
         const char *vertex; 
-        auto vertexSource = retrieve_source_code("vertex.glsl");
+        auto vertexSource = retrieve_source_code(vert_path);
         if (vertexSource) {
             vertex = vertexSource->c_str();
         } else {
@@ -27,11 +27,11 @@ namespace shader {
 
         glShaderSource(vertexShader, 1, &vertex, NULL);
         glCompileShader(vertexShader);
-        GLint success = error_check_compile(vertexShader);
+        GLint success = error_check_compile(vertexShader, "vertex");
         if (!success) std::abort();
 
 
-        auto fragSource = retrieve_source_code("fragment.glsl");
+        auto fragSource = retrieve_source_code(frag_path);
         const char *frag;
         if (fragSource) {
             frag = fragSource->c_str();
@@ -44,14 +44,22 @@ namespace shader {
         glShaderSource(fragmentShader, 1, &frag, NULL);
 
         glCompileShader(fragmentShader);
-
+        success = error_check_compile(fragmentShader, "fragment");
+        if (!success) std::abort();
 
         m_progID = glCreateProgram();
 
         glAttachShader(m_progID, vertexShader);
         glAttachShader(m_progID, fragmentShader);
         glLinkProgram(m_progID);
-
+        GLint linkSuccess;
+        glGetProgramiv(m_progID, GL_LINK_STATUS, &linkSuccess);
+        if (!linkSuccess) {
+            char infoLog[512];
+            glGetProgramInfoLog(m_progID, 512, NULL, infoLog);
+            std::cout << "ERROR::SHADER::LINK_FAILED\n" << infoLog << std::endl;
+            std::abort();
+        }
 
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
@@ -79,6 +87,11 @@ namespace shader {
         glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
     }
 
+    void Shader::set_uniform(const char *attr, const glm::vec3 &v) {
+        unsigned int loc = glGetUniformLocation(m_progID, attr);
+        glUniform3fv(loc, 1, glm::value_ptr(v));
+    }
+
     std::optional<std::string> Shader::retrieve_source_code(const std::string &path) {
         std::ifstream file(std::string(SHADER_DIR) + "/" + path);
         if (file.is_open()) {
@@ -91,19 +104,30 @@ namespace shader {
         }
     }
 
-    GLint Shader::error_check_compile(GLuint gl_value) {
+    GLint Shader::error_check_compile(GLuint gl_value, const std::string &ty) {
         GLint success; 
         char infoLog[512]; 
         glGetShaderiv(gl_value, GL_COMPILE_STATUS, &success); 
         if (!success) {
             glGetShaderInfoLog(gl_value, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+            std::cout << "ERROR::SHADER::" << ty << "::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
         return success;
     }
 
+    Shader::Shader(Shader &&other) noexcept : m_progID(other.m_progID)  {
+        other.m_progID = 0;
+    }
+
+    Shader& Shader::operator=(Shader &&other) noexcept {
+        if (this != &other) {
+            m_progID = other.m_progID;
+            other.m_progID = 0;
+        }
+        return *this;
+    }
 
     Shader::~Shader() {
-        glDeleteProgram(m_progID);
+        if (m_progID) glDeleteProgram(m_progID);
     }
 }

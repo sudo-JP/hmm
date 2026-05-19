@@ -82,10 +82,31 @@ int main() {
     texture::Texture tex("modiface.png", "tamm-cat.png");
 
     // Entity 
-    entity::Entity house = entity::Entity(vertices, "house_vert.glsl", "house_frag.glsl", indices);
+    std::vector<mesh::MeshData> house_data = {
+        mesh::MeshData{
+            .index = 0, 
+            .size = 3
+        },
+        mesh::MeshData {
+            .index = 1, 
+            .size = 3,
+        },
+        mesh::MeshData {
+            .index = 2, 
+            .size = 2, 
+        },
+    };
+    entity::Entity house = entity::Entity(vertices, "house_vert.glsl", "house_frag.glsl", house_data, indices);
     house.rotate(glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-    entity::Entity light_cube = entity::Entity(light_vertices, "light_vert.glsl", "light_frag.glsl");
+    std::vector<mesh::MeshData> light_cube_data = {
+        mesh::MeshData{
+            .index = 0,
+            .size = 3,
+        },
+    };
+    entity::Entity light_cube = entity::Entity(light_vertices, "light_vert.glsl", "light_frag.glsl", light_cube_data);
+    light_cube.translate(glm::vec3(-1.0f, 0.0f, -0.5f));
 
     // camera
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -101,9 +122,9 @@ int main() {
     float camX, camZ;
 
     win.render([&]() {
-        glClearColor(0.616f, 0.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        auto house_shader = house.get_shader();
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        auto &house_shader = house.get_shader();
         house_shader.use();
 
         camX = sin(glfwGetTime()) * radius;
@@ -121,6 +142,10 @@ int main() {
         house_shader.set_uniform("texture1", 1);
         house_shader.set_uniform("texture2", 0);
 
+        auto &cube_shader = light_cube.get_shader();
+        cube_shader.set_uniform("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+        cube_shader.set_uniform("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
         auto cam_pos = cam.get_cam_pos();
         auto cam_front = cam.get_cam_front();
         if (win.is_key_pressed(GLFW_KEY_W)) {
@@ -137,7 +162,8 @@ int main() {
         }
 
         tex.bind();
-        house.draw();
+        house.render();
+        light_cube.render();
     });
 
     return 0;

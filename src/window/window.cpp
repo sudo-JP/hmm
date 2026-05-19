@@ -6,7 +6,10 @@ namespace window {
     }
 
     Window::Window() {
-        glfwInit();
+        if (!glfwInit()) {
+            std::cout << "Failed to initialize GLFW" << std::endl;
+            std::abort();
+        }
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -27,6 +30,7 @@ namespace window {
             std::abort();
         }
 
+        glEnable(GL_DEPTH_TEST);
         glViewport(0, 0, WITDH, HEIGHT);
         glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
     }
