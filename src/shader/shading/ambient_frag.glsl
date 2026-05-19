@@ -3,6 +3,7 @@
 out vec4 FragColor;
 uniform vec3 lightColor; 
 uniform vec3 objectColor; 
+in vec3 Normal;
 
 void main() {
     float ambientStrength = 0.1f; 
