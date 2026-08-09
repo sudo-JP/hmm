@@ -25,7 +25,7 @@ namespace window {
 
         glfwMakeContextCurrent(m_window);
 
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
             std::cout << "Failed to init GLAD" << std::endl;
             std::abort();
         }

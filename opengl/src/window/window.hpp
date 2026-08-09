@@ -1,8 +1,8 @@
 #pragma once
 
-#include "glad/glad.h"
+#include <glad/gl.h>
 #include <cstdlib>
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include <functional>
 

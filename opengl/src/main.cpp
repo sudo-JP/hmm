@@ -1,12 +1,9 @@
+#include "mesh/mesh.hpp"
 #include "camera/camera.hpp"
+#include "shader/shader.hpp"
+#include "texture/texture.hpp"
+#include "window/window.hpp"
 #include "entity/entity.hpp"
-#include "glm/fwd.hpp"
-#include "glm/geometric.hpp"
-#include "shader.hpp"
-#include "mesh.hpp"
-#include "window.hpp"
-#include "texture.hpp"
-#include <cassert>
 #include <glm/fwd.hpp>
 #include <glm/trigonometric.hpp>
 #include <iostream>

@@ -1,8 +1,9 @@
 #pragma once 
-#include "glad/glad.h"
+#include <glad/gl.h>
 #include <optional>
 #include <string>
 #include "glm/glm.hpp"
+
 
 namespace shader {
     class Shader {
