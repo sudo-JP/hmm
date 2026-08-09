@@ -112,7 +112,7 @@ int main() {
     std::vector<glm::vec3> positions = {
         glm::vec3(1.0f, 0.0f, 0.0f),
         glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
+        //glm::vec3(0.0f, 1.0f, 0.0f),
     };
 
 
