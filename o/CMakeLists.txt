@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(TestOpenGL VERSION 1.0 LANGUAGES C CXX)
+project(hmm VERSION 1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -75,7 +75,7 @@ target_include_directories(glad_gl PUBLIC
 
 find_package(OpenGL REQUIRED)
 
-add_executable(TestOpenGL
+add_executable(hmm
     src/main.cpp
     src/camera/camera.cpp
     src/camera/camera.hpp
@@ -91,17 +91,17 @@ add_executable(TestOpenGL
     src/window/window.hpp
 )
 
-target_include_directories(TestOpenGL PRIVATE
+target_include_directories(hmm PRIVATE
     src
     "${stb_SOURCE_DIR}"
 )
 
-target_compile_definitions(TestOpenGL PRIVATE
+target_compile_definitions(hmm PRIVATE
     "IMAGE_DIR=\"${CMAKE_SOURCE_DIR}/src/texture\""
     "SHADER_DIR=\"${CMAKE_SOURCE_DIR}/src/shader/shading\""
 )
 
-target_link_libraries(TestOpenGL PRIVATE
+target_link_libraries(hmm PRIVATE
     glad_gl
     glfw
     glm::glm
